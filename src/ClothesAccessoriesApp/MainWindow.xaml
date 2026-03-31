@@ -1,0 +1,457 @@
+﻿<Window x:Class="ClothesAccessoriesApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:ClothesAccessoriesApp.Models"
+        mc:Ignorable="d"
+        Title="Одежда и аксессуары"
+        Width="1460"
+        Height="900"
+        MinWidth="1180"
+        MinHeight="760"
+        Background="{DynamicResource AppBackgroundBrush}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Padding="24"
+                CornerRadius="28"
+                Background="{DynamicResource PanelBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock Text="Одежда и аксессуары"
+                               Style="{DynamicResource HeroTitleStyle}" />
+                    <TextBlock Margin="0,10,0,0"
+                               Text="Спортивный каталог с гостевым режимом, администрированием, корзиной и библиотекой справочников."
+                               Style="{DynamicResource SubtitleTextStyle}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Style="{DynamicResource GhostButtonStyle}"
+                                Command="{Binding ToggleThemeCommand}"
+                                Content="{Binding ThemeButtonText}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="0,18,0,0"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Margin="0,0,10,0"
+                                Style="{DynamicResource GhostButtonStyle}"
+                                Command="{Binding SwitchRoleCommand}"
+                                CommandParameter="Guest"
+                                Content="Роль: Гость" />
+                        <Button Style="{DynamicResource AccentButtonStyle}"
+                                Command="{Binding SwitchRoleCommand}"
+                                CommandParameter="Admin"
+                                Content="Роль: Администратор" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1"
+              Margin="0,24,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="420" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Padding="20"
+                    CornerRadius="24"
+                    Background="{DynamicResource PanelBrush}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Навигация"
+                                   Style="{DynamicResource SectionTitleStyle}" />
+                        <TextBlock Margin="0,12,0,8"
+                                   Text="Поиск"
+                                   Style="{DynamicResource CaptionTextStyle}" />
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock Margin="0,18,0,8"
+                                   Text="Категория"
+                                   Style="{DynamicResource CaptionTextStyle}" />
+                        <ComboBox ItemsSource="{Binding Categories}"
+                                  SelectedItem="{Binding SelectedCategoryFilter}"
+                                  DisplayMemberPath="Name" />
+
+                        <Button Margin="0,14,0,0"
+                                Style="{DynamicResource GhostButtonStyle}"
+                                Command="{Binding ClearFiltersCommand}"
+                                Content="Сбросить фильтры" />
+
+                        <Border Margin="0,24,0,0"
+                                Padding="18"
+                                CornerRadius="20"
+                                Background="{DynamicResource AccentMutedBrush}">
+                            <StackPanel>
+                                <TextBlock Text="Корзина"
+                                           Style="{DynamicResource SectionTitleStyle}" />
+                                <ItemsControl Margin="0,14,0,0"
+                                              ItemsSource="{Binding CartItems}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type models:CartItem}">
+                                            <Border Margin="0,0,0,10"
+                                                    Padding="12"
+                                                    CornerRadius="16"
+                                                    Background="{DynamicResource CardBrush}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding ProductName}"
+                                                                   FontWeight="SemiBold" />
+                                                        <TextBlock Margin="0,4,0,0"
+                                                                   Text="{Binding Quantity, StringFormat=Количество: {0}}"
+                                                                   Style="{DynamicResource SmallTextStyle}" />
+                                                    </StackPanel>
+                                                    <TextBlock Grid.Column="1"
+                                                               VerticalAlignment="Center"
+                                                               Text="{Binding TotalPrice, StringFormat={}{0:F2} ₽}"
+                                                               Foreground="{DynamicResource AccentBrush}"
+                                                               FontWeight="SemiBold" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Margin="0,8,0,0"
+                                           Text="{Binding CartTotal, StringFormat=Итог: {0:F2} ₽}"
+                                           Style="{DynamicResource MetricTextStyle}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Margin="0,24,0,0"
+                                Padding="18"
+                                CornerRadius="20"
+                                Background="{DynamicResource CardBrush}">
+                            <StackPanel>
+                                <TextBlock Text="Архитектура"
+                                           Style="{DynamicResource SectionTitleStyle}" />
+                                <TextBlock Margin="0,10,0,0"
+                                           Text="Models • Data • Repositories • Services • ViewModels • Styles • Tests"
+                                           TextWrapping="Wrap"
+                                           Style="{DynamicResource SmallTextStyle}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Margin="24,0"
+                    Padding="20"
+                    CornerRadius="24"
+                    Background="{DynamicResource PanelBrush}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock Text="Каталог"
+                                       Style="{DynamicResource SectionTitleStyle}" />
+                            <TextBlock Margin="0,6,0,0"
+                                       Text="{Binding SummaryText}"
+                                       Style="{DynamicResource SmallTextStyle}" />
+                        </StackPanel>
+
+                        <Button Grid.Column="1"
+                                Style="{DynamicResource AccentButtonStyle}"
+                                Command="{Binding AddToCartCommand}"
+                                Content="Добавить в корзину" />
+                    </Grid>
+
+                    <ListBox Grid.Row="1"
+                             Margin="0,18,0,0"
+                             ItemsSource="{Binding FilteredProducts}"
+                             SelectedItem="{Binding SelectedProduct}"
+                             Background="Transparent"
+                             BorderThickness="0">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0,0,0,12" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="ItemBorder"
+                                                    Padding="0"
+                                                    CornerRadius="20"
+                                                    Background="Transparent">
+                                                <ContentPresenter />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="ItemBorder"
+                                                            Property="Background"
+                                                            Value="{DynamicResource SelectionBrush}" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:Product}">
+                                <Border Padding="18"
+                                        CornerRadius="20"
+                                        Background="{DynamicResource CardBrush}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontSize="18"
+                                                       FontWeight="SemiBold" />
+                                            <TextBlock Margin="0,6,0,0"
+                                                       Text="{Binding Description}"
+                                                       TextWrapping="Wrap"
+                                                       Style="{DynamicResource SmallTextStyle}" />
+                                            <WrapPanel Margin="0,12,0,0">
+                                                <Border Style="{DynamicResource BadgeStyle}">
+                                                    <TextBlock Text="{Binding Category.Name}" />
+                                                </Border>
+                                                <Border Margin="8,0,0,0"
+                                                        Style="{DynamicResource BadgeStyle}">
+                                                    <TextBlock Text="{Binding Brand.Name}" />
+                                                </Border>
+                                                <Border Margin="8,0,0,0"
+                                                        Style="{DynamicResource BadgeStyle}">
+                                                    <TextBlock Text="{Binding Material.Name}" />
+                                                </Border>
+                                            </WrapPanel>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1"
+                                                    HorizontalAlignment="Right">
+                                            <TextBlock HorizontalAlignment="Right"
+                                                       Text="{Binding Price, StringFormat={}{0:F2} ₽}"
+                                                       Style="{DynamicResource MetricTextStyle}" />
+                                            <TextBlock Margin="0,8,0,0"
+                                                       HorizontalAlignment="Right"
+                                                       Text="{Binding StockQuantity, StringFormat=Остаток: {0}}"
+                                                       Style="{DynamicResource SmallTextStyle}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Column="2"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Border Padding="20"
+                            CornerRadius="24"
+                            Background="{DynamicResource PanelBrush}">
+                        <StackPanel>
+                            <TextBlock Text="Детали товара"
+                                       Style="{DynamicResource SectionTitleStyle}" />
+                            <TextBlock Margin="0,16,0,0"
+                                       Text="{Binding SelectedProduct.Name, TargetNullValue=Выберите товар из каталога}"
+                                       FontSize="24"
+                                       FontWeight="Bold" />
+                            <TextBlock Margin="0,10,0,0"
+                                       Text="{Binding SelectedProduct.Description, TargetNullValue=Здесь появится описание выбранной позиции.}"
+                                       TextWrapping="Wrap"
+                                       Style="{DynamicResource SubtitleTextStyle}" />
+
+                            <Grid Margin="0,18,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="Цена"
+                                               Style="{DynamicResource CaptionTextStyle}" />
+                                    <TextBlock Margin="0,6,0,0"
+                                               Text="{Binding SelectedProduct.Price, StringFormat={}{0:F2} ₽, TargetNullValue=0.00 ₽}"
+                                               Style="{DynamicResource MetricTextStyle}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Склад"
+                                               Style="{DynamicResource CaptionTextStyle}" />
+                                    <TextBlock Margin="0,6,0,0"
+                                               Text="{Binding SelectedProduct.StockQuantity, StringFormat={}{0} шт., TargetNullValue=0 шт.}"
+                                               Style="{DynamicResource MetricTextStyle}" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Margin="0,24,0,0"
+                            Padding="20"
+                            CornerRadius="24"
+                            Background="{DynamicResource PanelBrush}"
+                            Visibility="{Binding IsGuestMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Text="Режим гостя"
+                                       Style="{DynamicResource SectionTitleStyle}" />
+                            <TextBlock Margin="0,12,0,0"
+                                       Text="Гость может просматривать каталог, искать товары по категориям и добавлять их в корзину без доступа к административным настройкам."
+                                       TextWrapping="Wrap"
+                                       Style="{DynamicResource SmallTextStyle}" />
+                            <Button Margin="0,18,0,0"
+                                    Style="{DynamicResource AccentButtonStyle}"
+                                    Command="{Binding AddToCartCommand}"
+                                    Content="Добавить выбранный товар" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Margin="0,24,0,0"
+                            Padding="20"
+                            CornerRadius="24"
+                            Background="{DynamicResource PanelBrush}"
+                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Text="Панель администратора"
+                                       Style="{DynamicResource SectionTitleStyle}" />
+
+                            <TextBlock Margin="0,16,0,8"
+                                       Text="Название товара"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <TextBox Text="{Binding ProductEditor.Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Описание"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <TextBox Height="72"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Text="{Binding ProductEditor.Description, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <Grid Margin="0,14,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Margin="0,0,8,0">
+                                    <TextBlock Margin="0,0,0,8"
+                                               Text="Цена"
+                                               Style="{DynamicResource CaptionTextStyle}" />
+                                    <TextBox Text="{Binding ProductEditor.PriceText, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
+                                </StackPanel>
+                                <StackPanel Margin="8,0,0,0">
+                                    <TextBlock Margin="0,0,0,8"
+                                               Text="Остаток"
+                                               Style="{DynamicResource CaptionTextStyle}" />
+                                    <TextBox Text="{Binding ProductEditor.StockQuantityText, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Категория"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <ComboBox ItemsSource="{Binding Categories}"
+                                      SelectedItem="{Binding ProductEditor.SelectedCategory}"
+                                      DisplayMemberPath="Name" />
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Бренд"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <ComboBox ItemsSource="{Binding Brands}"
+                                      SelectedItem="{Binding ProductEditor.SelectedBrand}"
+                                      DisplayMemberPath="Name" />
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Материал"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <ComboBox ItemsSource="{Binding Materials}"
+                                      SelectedItem="{Binding ProductEditor.SelectedMaterial}"
+                                      DisplayMemberPath="Name" />
+
+                            <WrapPanel Margin="0,18,0,0">
+                                <Button Style="{DynamicResource AccentButtonStyle}"
+                                        Command="{Binding NewProductCommand}"
+                                        Content="Новый товар" />
+                                <Button Margin="10,0,0,0"
+                                        Style="{DynamicResource GhostButtonStyle}"
+                                        Command="{Binding SaveProductCommand}"
+                                        Content="Сохранить" />
+                                <Button Margin="10,0,0,0"
+                                        Style="{DynamicResource GhostButtonStyle}"
+                                        Command="{Binding DeleteProductCommand}"
+                                        Content="Удалить" />
+                            </WrapPanel>
+
+                            <TextBlock Margin="0,22,0,0"
+                                       Text="Справочники"
+                                       Style="{DynamicResource SectionTitleStyle}" />
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Новая категория"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <DockPanel>
+                                <TextBox DockPanel.Dock="Left"
+                                         Width="250"
+                                         Text="{Binding NewCategoryName, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button Margin="10,0,0,0"
+                                        Style="{DynamicResource GhostButtonStyle}"
+                                        Command="{Binding AddCategoryCommand}"
+                                        Content="Добавить" />
+                            </DockPanel>
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Новый бренд"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <DockPanel>
+                                <TextBox DockPanel.Dock="Left"
+                                         Width="250"
+                                         Text="{Binding NewBrandName, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button Margin="10,0,0,0"
+                                        Style="{DynamicResource GhostButtonStyle}"
+                                        Command="{Binding AddBrandCommand}"
+                                        Content="Добавить" />
+                            </DockPanel>
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Новый материал"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <DockPanel>
+                                <TextBox DockPanel.Dock="Left"
+                                         Width="250"
+                                         Text="{Binding NewMaterialName, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button Margin="10,0,0,0"
+                                        Style="{DynamicResource GhostButtonStyle}"
+                                        Command="{Binding AddMaterialCommand}"
+                                        Content="Добавить" />
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>
