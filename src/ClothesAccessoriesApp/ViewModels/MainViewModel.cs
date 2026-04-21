@@ -442,8 +442,14 @@ public class MainViewModel : ViewModelBase, IDisposable
     }
 
     /// <summary>
+    /// Флаг, указывающий, что пользователь авторизован (вошел в систему).
+    /// </summary>
+    public bool IsLoggedIn => _currentRole != UserRole.Guest || _isLoginWindowOpen;
+
+    /// <summary>
     /// Переключает роль пользователя между гостем, работником и администратором.
     /// </summary>
+
     private void SwitchRole(string? role)
     {
         _currentRole = role switch
@@ -463,6 +469,7 @@ public class MainViewModel : ViewModelBase, IDisposable
             CreateNewProduct();
         }
 
+        OnPropertyChanged(nameof(IsLoggedIn));
         OnPropertyChanged(nameof(IsGuestMode));
         OnPropertyChanged(nameof(IsEmployeeMode));
         OnPropertyChanged(nameof(IsAdminMode));

@@ -9,52 +9,32 @@ obj/
 *.cache
 *.suo
 *.user
-*.aps
-*.ilk
-*.iobj
-*.ipdb
-*.tlog
-*.log
-*.tmp
 
 # Dependencies
 packages/
 node_modules/
 .nuget/
-.nuget.packages/
 
-# IDE specific
-.vs/
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS generated files
+# OS
 .DS_Store
 Thumbs.db
-ehthumbs.db
-Icon?
-desktop.ini
 
-# User-specific files
-*.userprefs
-*.useroptions
-*.sln.docstates
-
-# Environment variables
-.env
-.env.local
-*.env.*
-
-# Test and coverage
+# Test coverage
 coverage/
 htmlcov/
-.coverage
-*.coveragerc
-
-# Local configuration
-local.settings.json
-appsettings.Development.json
-appsettings.Local.json
+*.coverage
 ```

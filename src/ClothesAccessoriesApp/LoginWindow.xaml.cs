@@ -18,5 +18,14 @@ public partial class LoginWindow : Window
         _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
         _viewModel = new LoginViewModel(this, _mainViewModel);
         DataContext = _viewModel;
+        
+        // Закрываем главное окно при закрытии окна авторизации (если не вошли)
+        this.Closed += (s, e) =>
+        {
+            if (!_mainViewModel.IsLoggedIn)
+            {
+                Application.Current.Shutdown();
+            }
+        };
     }
 }

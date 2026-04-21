@@ -50,14 +50,17 @@ public partial class App : Application
                 _cartService,
                 _themeService);
 
-            // Создание и отображение главного окна
-            var window = new MainWindow
+            // Создание главного окна (пока скрыто)
+            var mainWindow = new MainWindow
             {
                 DataContext = _mainViewModel
             };
 
-            MainWindow = window;
-            window.Show();
+            MainWindow = mainWindow;
+
+            // Открытие окна авторизации
+            var loginWindow = new LoginWindow(_mainViewModel);
+            loginWindow.Show();
         }
         catch (Exception ex)
         {
