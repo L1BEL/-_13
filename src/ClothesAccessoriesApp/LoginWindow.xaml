@@ -1,0 +1,133 @@
+<Window x:Class="ClothesAccessoriesApp.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Авторизация"
+        Width="480"
+        Height="520"
+        MinWidth="400"
+        MinHeight="450"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        FontFamily="Segoe UI">
+    
+    <Border Background="{DynamicResource PanelBrush}"
+            CornerRadius="24"
+            BorderBrush="{DynamicResource InputBorderBrush}"
+            BorderThickness="1"
+            Padding="32">
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок -->
+            <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+                <TextBlock Text="👤 Авторизация"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource PrimaryTextBrush}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Margin="0,8,0,0"
+                           Text="Выберите роль для входа в систему"
+                           FontSize="14"
+                           Foreground="{DynamicResource SecondaryTextBrush}"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Кнопки выбора роли -->
+            <StackPanel Grid.Row="1" 
+                        VerticalAlignment="Center"
+                        Margin="0,32,0,32">
+                
+                <!-- Гость -->
+                <Button Command="{Binding LoginAsGuestCommand}"
+                        Style="{DynamicResource RoleButtonStyle}"
+                        Margin="0,0,0,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="👁️" FontSize="24" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                            <TextBlock Text="Войти как Гость"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                            <TextBlock Margin="0,4,0,0"
+                                       Text="Просмотр каталога и добавление в корзину"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource SecondaryTextBrush}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Button>
+
+                <!-- Работник -->
+                <Button Command="{Binding LoginAsEmployeeCommand}"
+                        Style="{DynamicResource RoleButtonStyle}"
+                        Margin="0,0,0,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="👔" FontSize="24" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                            <TextBlock Text="Войти как Работник"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                            <TextBlock Margin="0,4,0,0"
+                                       Text="Редактирование товаров и управление заказами"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource SecondaryTextBrush}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Button>
+
+                <!-- Администратор -->
+                <Button Command="{Binding LoginAsAdminCommand}"
+                        Style="{DynamicResource RoleButtonStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="⚙️" FontSize="24" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                            <TextBlock Text="Войти как Администратор"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                            <TextBlock Margin="0,4,0,0"
+                                       Text="Полный доступ: управление товарами, справочниками и пользователями"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource SecondaryTextBrush}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Button>
+            </StackPanel>
+
+            <!-- Кнопка закрытия -->
+            <Button Grid.Row="2"
+                    Command="{Binding CancelCommand}"
+                    Content="Отмена"
+                    Style="{DynamicResource GhostButtonStyle}"
+                    Padding="16,10"
+                    HorizontalAlignment="Stretch"/>
+        </Grid>
+    </Border>
+</Window>

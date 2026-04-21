@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:ClothesAccessoriesApp.Models"
+        xmlns:converters="clr-namespace:ClothesAccessoriesApp.Converters"
         mc:Ignorable="d"
         Title="Одежда и аксессуары"
         Width="1460"
@@ -11,6 +12,10 @@
         MinWidth="1180"
         MinHeight="760"
         Background="{DynamicResource AppBackgroundBrush}">
+    <Window.Resources>
+        <!-- Конвертер для отображения изображений по пути -->
+        <converters:ImagePathConverter x:Key="ImagePathConverter"/>
+    </Window.Resources>
     <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -37,25 +42,48 @@
 
                 <StackPanel Grid.Column="1"
                             HorizontalAlignment="Right">
-                    <StackPanel Orientation="Horizontal"
+                        <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right">
                         <Button Style="{DynamicResource GhostButtonStyle}"
                                 Command="{Binding ToggleThemeCommand}"
                                 Content="{Binding ThemeButtonText}" />
+                        
+                        <!-- Кнопка входа/выбора роли -->
+                        <Button Margin="10,0,0,0"
+                                Style="{DynamicResource AccentButtonStyle}"
+                                Command="{Binding OpenLoginWindowCommand}"
+                                Content="👤 Войти">
+                            <Button.ToolTip>
+                                <TextBlock Text="Выбрать роль: Гость, Работник или Администратор"/>
+                            </Button.ToolTip>
+                        </Button>
                     </StackPanel>
 
+                    <!-- Индикатор текущей роли -->
                     <StackPanel Margin="0,18,0,0"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right">
-                        <Button Margin="0,0,10,0"
-                                Style="{DynamicResource GhostButtonStyle}"
-                                Command="{Binding SwitchRoleCommand}"
-                                CommandParameter="Guest"
-                                Content="Роль: Гость" />
-                        <Button Style="{DynamicResource AccentButtonStyle}"
-                                Command="{Binding SwitchRoleCommand}"
-                                CommandParameter="Admin"
-                                Content="Роль: Администратор" />
+                        <Border Padding="12,8"
+                                CornerRadius="12"
+                                Background="{DynamicResource AccentMutedBrush}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🔹 " FontSize="14"/>
+                                <TextBlock Text="{Binding SummaryText}"
+                                           FontWeight="SemiBold"
+                                           Foreground="{DynamicResource PrimaryTextBrush}"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Индикатор загрузки -->
+                        <Border Margin="10,0,0,0"
+                                Padding="12,8"
+                                CornerRadius="12"
+                                Background="{DynamicResource AccentMutedBrush}"
+                                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="⏳ Загрузка..." 
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </Border>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -101,6 +129,14 @@
                             <StackPanel>
                                 <TextBlock Text="Корзина"
                                            Style="{DynamicResource SectionTitleStyle}" />
+                                
+                                <!-- Кнопка очистки корзины -->
+                                <Button Margin="0,10,0,0"
+                                        Style="{DynamicResource GhostButtonStyle}"
+                                        Command="{Binding ClearCartCommand}"
+                                        Content="🗑️ Очистить корзину"
+                                        ToolTip="Удалить все товары из корзины"/>
+                                
                                 <ItemsControl Margin="0,14,0,0"
                                               ItemsSource="{Binding CartItems}">
                                     <ItemsControl.ItemTemplate>
@@ -112,6 +148,7 @@
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
                                                         <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
                                                     <StackPanel>
@@ -126,6 +163,14 @@
                                                                Text="{Binding TotalPrice, StringFormat={}{0:F2} ₽}"
                                                                Foreground="{DynamicResource AccentBrush}"
                                                                FontWeight="SemiBold" />
+                                                    <Button Grid.Column="2"
+                                                            Margin="8,0,0,0"
+                                                            Style="{DynamicResource GhostButtonStyle}"
+                                                            Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="✕"
+                                                            FontSize="12"
+                                                            Padding="8,4"/>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
@@ -180,10 +225,24 @@
                                        Style="{DynamicResource SmallTextStyle}" />
                         </StackPanel>
 
-                        <Button Grid.Column="1"
-                                Style="{DynamicResource AccentButtonStyle}"
-                                Command="{Binding AddToCartCommand}"
-                                Content="Добавить в корзину" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <!-- Кнопки сортировки -->
+                            <Button Style="{DynamicResource GhostButtonStyle}"
+                                    Command="{Binding SortByNameCommand}"
+                                    Content="📝 Сортировать по названию" 
+                                    ToolTip="Сортировка товаров по названию"/>
+                            <Button Margin="5,0,0,0"
+                                    Style="{DynamicResource GhostButtonStyle}"
+                                    Command="{Binding SortByPriceCommand}"
+                                    Content="💰 Сортировать по цене"
+                                    ToolTip="Сортировка товаров по цене"/>
+                            
+                            <!-- Кнопка добавления в корзину -->
+                            <Button Margin="15,0,0,0"
+                                    Style="{DynamicResource AccentButtonStyle}"
+                                    Command="{Binding AddToCartCommand}"
+                                    Content="Добавить в корзину" />
+                        </StackPanel>
                     </Grid>
 
                     <ListBox Grid.Row="1"
@@ -225,11 +284,24 @@
                                         Background="{DynamicResource CardBrush}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <StackPanel>
+                                        <!-- Изображение товара -->
+                                        <Image Grid.Column="0"
+                                               Width="100"
+                                               Height="100"
+                                               Margin="0,0,16,0"
+                                               Stretch="UniformToFill"
+                                               Source="{Binding ImagePath, Converter={StaticResource ImagePathConverter}, TargetNullValue={x:Null}}">
+                                            <Image.Clip>
+                                                <RectangleGeometry Rect="0,0,100,100" RadiusX="12" RadiusY="12"/>
+                                            </Image.Clip>
+                                        </Image>
+
+                                        <StackPanel Grid.Column="1">
                                             <TextBlock Text="{Binding Name}"
                                                        FontSize="18"
                                                        FontWeight="SemiBold" />
@@ -252,7 +324,7 @@
                                             </WrapPanel>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Column="1"
+                                        <StackPanel Grid.Column="2"
                                                     HorizontalAlignment="Right">
                                             <TextBlock HorizontalAlignment="Right"
                                                        Text="{Binding Price, StringFormat={}{0:F2} ₽}"
@@ -311,25 +383,171 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- Панель для гостя -->
                     <Border Margin="0,24,0,0"
                             Padding="20"
                             CornerRadius="24"
                             Background="{DynamicResource PanelBrush}"
                             Visibility="{Binding IsGuestMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
-                            <TextBlock Text="Режим гостя"
+                            <TextBlock Text="👁️ Режим гостя"
                                        Style="{DynamicResource SectionTitleStyle}" />
                             <TextBlock Margin="0,12,0,0"
-                                       Text="Гость может просматривать каталог, искать товары по категориям и добавлять их в корзину без доступа к административным настройкам."
+                                       Text="Гость может просматривать каталог, искать товары по категориям и добавлять их в корзину без доступа к редактированию."
                                        TextWrapping="Wrap"
                                        Style="{DynamicResource SmallTextStyle}" />
                             <Button Margin="0,18,0,0"
                                     Style="{DynamicResource AccentButtonStyle}"
                                     Command="{Binding AddToCartCommand}"
-                                    Content="Добавить выбранный товар" />
+                                    Content="➕ Добавить выбранный товар в корзину" />
                         </StackPanel>
                     </Border>
 
+                    <!-- Панель для работника -->
+                    <Border Margin="0,24,0,0"
+                            Padding="20"
+                            CornerRadius="24"
+                            Background="{DynamicResource PanelBrush}"
+                            Visibility="{Binding IsEmployeeMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Text="👔 Панель работника"
+                                       Style="{DynamicResource SectionTitleStyle}" />
+                            <TextBlock Margin="0,12,0,0"
+                                       Text="Работник может просматривать каталог, редактировать информацию о товарах и управлять заказами."
+                                       TextWrapping="Wrap"
+                                       Style="{DynamicResource SmallTextStyle}" />
+
+                            <TextBlock Margin="0,16,0,8"
+                                       Text="Название товара"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <TextBox Text="{Binding ProductEditor.Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Описание"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <TextBox Height="72"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Text="{Binding ProductEditor.Description, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <Grid Margin="0,14,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Margin="0,0,8,0">
+                                    <TextBlock Margin="0,0,0,8"
+                                               Text="Цена"
+                                               Style="{DynamicResource CaptionTextStyle}" />
+                                    <TextBox Text="{Binding ProductEditor.PriceText, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
+                                </StackPanel>
+                                <StackPanel Margin="8,0,0,0">
+                                    <TextBlock Margin="0,0,0,8"
+                                               Text="Остаток"
+                                               Style="{DynamicResource CaptionTextStyle}" />
+                                    <TextBox Text="{Binding ProductEditor.StockQuantityText, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Категория"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <ComboBox ItemsSource="{Binding Categories}"
+                                      SelectedItem="{Binding ProductEditor.SelectedCategory}"
+                                      DisplayMemberPath="Name" />
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Бренд"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <ComboBox ItemsSource="{Binding Brands}"
+                                      SelectedItem="{Binding ProductEditor.SelectedBrand}"
+                                      DisplayMemberPath="Name" />
+
+                            <TextBlock Margin="0,14,0,8"
+                                       Text="Материал"
+                                       Style="{DynamicResource CaptionTextStyle}" />
+                            <ComboBox ItemsSource="{Binding Materials}"
+                                      SelectedItem="{Binding ProductEditor.SelectedMaterial}"
+                                      DisplayMemberPath="Name" />
+
+                            <!-- Загрузка изображения -->
+                            <Border Margin="0,18,0,0"
+                                    Padding="16"
+                                    CornerRadius="16"
+                                    Background="{DynamicResource CardBrush}">
+                                <StackPanel>
+                                    <TextBlock Text="Изображение товара"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                    <TextBlock Margin="0,8,0,0"
+                                               Text="Загрузите фотографию товара (JPG, PNG, BMP, GIF, макс. 5 МБ)"
+                                               Style="{DynamicResource SmallTextStyle}"
+                                               TextWrapping="Wrap"/>
+                                    
+                                    <!-- Предпросмотр изображения -->
+                                    <Image Margin="0,12,0,0"
+                                           Height="200"
+                                           Stretch="UniformToFill"
+                                           Source="{Binding SelectedProductImage}"
+                                           Visibility="{Binding SelectedProductImage, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                        <Image.Clip>
+                                            <RectangleGeometry Rect="0,0,400,200" RadiusX="12" RadiusY="12"/>
+                                        </Image.Clip>
+                                    </Image>
+                                    
+                                    <!-- Сообщение если нет изображения -->
+                                    <TextBlock Margin="0,12,0,0"
+                                               Text="Изображение не загружено"
+                                               Foreground="{DynamicResource SecondaryTextBrush}"
+                                               FontStyle="Italic"
+                                               HorizontalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedProductImage}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    
+                                    <!-- Ошибка загрузки -->
+                                    <TextBlock Margin="0,8,0,0"
+                                               Text="{Binding ImageUploadError}"
+                                               Foreground="Red"
+                                               FontSize="12"
+                                               TextWrapping="Wrap"
+                                               Visibility="{Binding ImageUploadError, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                                    
+                                    <Button Margin="0,12,0,0"
+                                            Style="{DynamicResource GhostButtonStyle}"
+                                            Command="{Binding UploadImageCommand}"
+                                            Content="📷 Загрузить изображение"
+                                            ToolTip="Выберите файл изображения для товара"/>
+                                </StackPanel>
+                            </Border>
+
+                            <WrapPanel Margin="0,18,0,0">
+                                <Button Style="{DynamicResource AccentButtonStyle}"
+                                        Command="{Binding NewProductCommand}"
+                                        Content="📄 Новый товар" />
+                                <Button Margin="10,0,0,0"
+                                        Style="{DynamicResource GhostButtonStyle}"
+                                        Command="{Binding SaveProductCommand}"
+                                        Content="💾 Сохранить" />
+                            </WrapPanel>
+
+                            <TextBlock Margin="0,12,0,0"
+                                       Text="⚠️ Удаление товаров доступно только администратору"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource SecondaryTextBrush}"
+                                       FontStyle="Italic" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Панель для администратора -->
                     <Border Margin="0,24,0,0"
                             Padding="20"
                             CornerRadius="24"

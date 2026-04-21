@@ -1,8 +1,31 @@
-.vs/
-**/bin/
-**/obj/
+```
+# Build artifacts
+*.obj
+*.exe
+*.dll
+*.pdb
 *.user
-*.suo
-*.cache
-*.db
-TestResults/
+*.userosscache
+*.sln.docstates
+
+# Dependencies
+packages/
+bin/
+obj/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# User-specific files
+.vs/
+.idea/
+*.userprefs
+
+# Configuration files (if they contain sensitive data)
+appsettings.Development.json
+appsettings.Production.json
+```

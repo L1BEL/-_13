@@ -1,7 +1,24 @@
-﻿namespace ClothesAccessoriesApp.Models;
+﻿using System;
 
+namespace ClothesAccessoriesApp.Models;
+
+/// <summary>
+/// Перечисление ролей пользователей в приложении.
+/// </summary>
 public enum UserRole
 {
+    /// <summary>
+    /// Гость — пользователь с правами только на просмотр и добавление товаров в корзину.
+    /// </summary>
     Guest,
+
+    /// <summary>
+    /// Работник — пользователь с правами на просмотр, редактирование товаров и управление корзиной.
+    /// </summary>
+    Employee,
+
+    /// <summary>
+    /// Администратор — пользователь с полными правами (добавление, редактирование, удаление товаров, управление справочниками).
+    /// </summary>
     Admin
 }

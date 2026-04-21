@@ -50,7 +50,8 @@ public static class DbInitializer
                 StockQuantity = 24,
                 CategoryId = categories[0].Id,
                 BrandId = brands[0].Id,
-                MaterialId = materials[1].Id
+                MaterialId = materials[1].Id,
+                ImagePath = null
             },
             new Product
             {
@@ -60,7 +61,8 @@ public static class DbInitializer
                 StockQuantity = 11,
                 CategoryId = categories[1].Id,
                 BrandId = brands[1].Id,
-                MaterialId = materials[0].Id
+                MaterialId = materials[0].Id,
+                ImagePath = null
             },
             new Product
             {
@@ -70,7 +72,8 @@ public static class DbInitializer
                 StockQuantity = 17,
                 CategoryId = categories[2].Id,
                 BrandId = brands[2].Id,
-                MaterialId = materials[2].Id
+                MaterialId = materials[2].Id,
+                ImagePath = null
             },
             new Product
             {
@@ -80,7 +83,8 @@ public static class DbInitializer
                 StockQuantity = 30,
                 CategoryId = categories[3].Id,
                 BrandId = brands[0].Id,
-                MaterialId = materials[2].Id
+                MaterialId = materials[2].Id,
+                ImagePath = null
             });
 
         context.SaveChanges();

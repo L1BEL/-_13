@@ -19,7 +19,7 @@ public class ThemeService
         _application = application;
     }
 
-    public AppTheme CurrentTheme { get; private set; } = AppTheme.Dark;
+    public AppTheme CurrentTheme { get; private set; } = AppTheme.Light;
 
     public void ApplyTheme(AppTheme theme)
     {
@@ -35,7 +35,7 @@ public class ThemeService
         }
 
         var source = theme == AppTheme.Dark ? "Styles/Theme.Dark.xaml" : "Styles/Theme.Light.xaml";
-        dictionaries.Add(new ResourceDictionary { Source = new Uri(source, UriKind.Relative) });
+        dictionaries.Insert(0, new ResourceDictionary { Source = new Uri(source, UriKind.Relative) });
         CurrentTheme = theme;
     }
 }

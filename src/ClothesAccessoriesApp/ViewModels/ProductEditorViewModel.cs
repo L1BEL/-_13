@@ -9,6 +9,7 @@ public class ProductEditorViewModel : ValidatableViewModelBase
     private string _description = string.Empty;
     private string _priceText = string.Empty;
     private string _stockQuantityText = string.Empty;
+    private string _imagePath = string.Empty;
     private Category? _selectedCategory;
     private Brand? _selectedBrand;
     private Material? _selectedMaterial;
@@ -67,6 +68,15 @@ public class ProductEditorViewModel : ValidatableViewModelBase
         }
     }
 
+    /// <summary>
+    /// Путь к изображению товара.
+    /// </summary>
+    public string ImagePath
+    {
+        get => _imagePath;
+        set => SetProperty(ref _imagePath, value);
+    }
+
     public Category? SelectedCategory
     {
         get => _selectedCategory;
@@ -114,6 +124,7 @@ public class ProductEditorViewModel : ValidatableViewModelBase
             Description = string.Empty;
             PriceText = string.Empty;
             StockQuantityText = "0";
+            ImagePath = string.Empty;
             SelectedCategory = null;
             SelectedBrand = null;
             SelectedMaterial = null;
@@ -125,6 +136,7 @@ public class ProductEditorViewModel : ValidatableViewModelBase
         Description = product.Description;
         PriceText = product.Price.ToString("F2");
         StockQuantityText = product.StockQuantity.ToString();
+        ImagePath = product.ImagePath ?? string.Empty;
         SelectedCategory = product.Category;
         SelectedBrand = product.Brand;
         SelectedMaterial = product.Material;
@@ -152,7 +164,8 @@ public class ProductEditorViewModel : ValidatableViewModelBase
             StockQuantity = int.Parse(StockQuantityText),
             CategoryId = SelectedCategory!.Id,
             BrandId = SelectedBrand!.Id,
-            MaterialId = SelectedMaterial!.Id
+            MaterialId = SelectedMaterial!.Id,
+            ImagePath = string.IsNullOrWhiteSpace(ImagePath) ? null : ImagePath.Trim()
         };
     }
 
